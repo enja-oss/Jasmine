@@ -31,18 +31,20 @@ A spec contains one or more expectations that test the state of the code under t
 SpecはJasmineのグローバル関数 it を呼び出して定義します。 
 describe と同じように文字列と関数を引数に取ります。
 文字列はspecの仕様についてのタイトルであり、関数はspecそのもの、つまりテストコードです。
-specには、テスト中の状態を確認するための期待値が1つ以上含まれている必要があります。
+specには、テスト中の状態を確認するための期待式が1つ以上含まれている必要があります。
 
 An expectation in Jasmine is an assertion that can be either true or false. 
 A spec with all true expectations is a passing spec. 
 A spec with one or more expectations that evaluate to false is a failing spec.
 
-Jasmineでの期待値は、trueまたはfalseのどちらかの状態を持つアサーションで指定します。
-specにおいてすべての期待値がtrueとなる場合、specを満たすと判定しますが、
-1つ以上の期待値がfalseと評価される場合は不合格と判定します。
+Jasmineでの期待式は、trueまたはfalseのいずれの状態を取るアサーションです。
+specにおいてすべての期待式がtrueとなる場合、テスト仕様を満たすと判定しますが、
+1つ以上の期待式がfalseと評価される場合は満たさないと判定します。
 
 ````javascript
+// テスト例
 describe("A suite", function() {
+  // 期待式と一緒にテスト仕様を定義します
   it("contains spec with an expectation", function() {
     expect(true).toBe(true);
   });
@@ -51,12 +53,18 @@ describe("A suite", function() {
 
 ##  It’s Just Functions
 
+##  それは単なる関数です。
+
 Since describe and it blocks are functions, they can contain any executable code necessary to implement the test. JavaScript scoping rules apply, so variables declared in a describe are available to any it block inside the suite.
 
+describe または it ブロックは関数なので、テストを実施するために必要ないかなるコードも含めることができます。Javascriptのスコープルールが適用され、 describeの中に宣言した変数は、suiteの内側のどの it ブロックからも利用できます。
+
 ````javascript
+// suiteは単なる関数です
 describe("A suite is just a function", function() {
   var a;
 
+  // そしてテスト仕様です
   it("and so is a spec", function() {
     a = true;
 
@@ -67,21 +75,33 @@ describe("A suite is just a function", function() {
 
 ##  Expectations
 
-Expectations are built with the function expect which takes a value, called the actual. It is chained with a Matcher function, which takes the expected value.
+Expectations are built with the function expect which takes a value, called the actual. 
+It is chained with a Matcher function, which takes the expected value.
+
+期待式は、実行値を引数に取る expect 関数で構築されます。期待値を渡した matcher 関数を連結します。
 
 ###  Matchers
 
-Each matcher implements a boolean comparison between the actual value and the expected value. It is responsible for reporting to Jasmine if the expectation is true or false. Jasmine will then pass or fail the spec.
+Each matcher implements a boolean comparison between the actual value and the expected value. 
+It is responsible for reporting to Jasmine if the expectation is true or false. 
+Jasmine will then pass or fail the spec.
+
+それぞれの matcher は、実行値と期待値を比較してbooleanで返す機能を実装しています。それは期待式がtrueであるかfalseであるかJasmineに報告する責務を持ち、それによりJasmineは次にspecを渡すか、または失敗するか選択します。
 
 Any matcher can evaluate to a negative assertion by chaining the call to expect with a not before calling the matcher.
 
+すべてmatcherは、期待式とmatcherの間にnotを連結することで、否定の評価を行うことが出来ます。
+
 ````javascript
+// 'toBe' matcherは===比較を行います
 describe("The 'toBe' matcher compares with ===", function() {
 
+  // そして肯定的な評価の場合
   it("and has a positive case ", function() {
     expect(true).toBe(true);
   });
 
+  // そして否定的な評価の場合
   it("and can have a negative case", function() {
     expect(false).not.toBe(true);
   });
