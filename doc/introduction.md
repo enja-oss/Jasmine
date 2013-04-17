@@ -57,7 +57,8 @@ describe("A suite", function() {
 
 Since describe and it blocks are functions, they can contain any executable code necessary to implement the test. JavaScript scoping rules apply, so variables declared in a describe are available to any it block inside the suite.
 
-describe または it ブロックは関数なので、テストを実施するために必要ないかなるコードも含めることができます。Javascriptのスコープルールが適用され、 describeの中に宣言した変数は、suiteの内側のどの it ブロックからも利用できます。
+describe または it ブロックは関数であるため、テストを実施するために必要ないかなるコードも含めることができます。
+Javascriptのスコープルールが適用され、 describeの中に宣言した変数は、suiteの内側のどの it ブロックからも利用できます。
 
 ````javascript
 // suiteは単なる関数です
@@ -75,10 +76,12 @@ describe("A suite is just a function", function() {
 
 ##  Expectations
 
+## 期待式
+
 Expectations are built with the function expect which takes a value, called the actual. 
 It is chained with a Matcher function, which takes the expected value.
 
-期待式は、実行値を引数に取る expect 関数で構築されます。期待値を渡した matcher 関数を連結します。
+期待式は、実行値を引数に取る `expect` 関数で構築されます。期待値を渡した `matcher` 関数を連結します。
 
 ###  Matchers
 
@@ -86,14 +89,15 @@ Each matcher implements a boolean comparison between the actual value and the ex
 It is responsible for reporting to Jasmine if the expectation is true or false. 
 Jasmine will then pass or fail the spec.
 
-それぞれの matcher は、実行値と期待値を比較してbooleanで返す機能を実装しています。それは期待式がtrueであるかfalseであるかJasmineに報告する責務を持ち、それによりJasmineは次にspecを渡すか、または失敗するか選択します。
+それぞれの matcher は、実行値と期待値を比較してbooleanで返す機能を実装しています。
+それは期待式がtrueであるかfalseであるかJasmineに報告する責務を持ち、それによりJasmineは次にspecを渡すか、または失敗するか選択します。
 
 Any matcher can evaluate to a negative assertion by chaining the call to expect with a not before calling the matcher.
 
 すべてmatcherは、期待式とmatcherの間にnotを連結することで、否定の評価を行うことが出来ます。
 
 ````javascript
-// 'toBe' matcherは===比較を行います
+// 'toBe' matcherは===と同等です。
 describe("The 'toBe' matcher compares with ===", function() {
 
   // そして肯定的な評価の場合
@@ -110,13 +114,23 @@ describe("The 'toBe' matcher compares with ===", function() {
 
 ##  Included Matchers
 
+## 付属 Matcher 関数
+
 Jasmine has a rich set of matchers included. Each is used here – all expectations and specs pass.
 
-There is also the ability to write custom matchers for when a project’s domain calls for specific assertions that are not included below.
+Jasmineは豊富なmatcherのセットを持っています。
+すべての期待式はこのページにて使われており、specはすべて合格するようになっています。
+
+There is also the ability to write custom matchers for 
+when a project’s domain calls for specific assertions that are not included below.
+
+さらに、プロジェクトの要求にて以下に含まれていない特定のアサーションを使用する場合、custom matchersを書くこともできます。
 
 ````javascript
+//付属matchers
 describe("Included matchers:", function() {
 
+  //'toBe' matcherは===と同等です。
   it("The 'toBe' matcher compares with ===", function() {
     var a = 12;
     var b = a;
@@ -125,13 +139,16 @@ describe("Included matchers:", function() {
     expect(a).not.toBe(null);
   });
 
+  //'toEqual' matcher
   describe("The 'toEqual' matcher", function() {
 
+    //シンプルなリテラル、変数に使う
     it("works for simple literals and variables", function() {
       var a = 12;
       expect(a).toEqual(12);
     });
 
+    //オブジェクトに使う
     it("should work for objects", function() {
       var foo = {
         a: 12,
@@ -145,6 +162,7 @@ describe("Included matchers:", function() {
     });
   });
 
+  //'toMatch' matcherは正規表現を扱います
   it("The 'toMatch' matcher is for regular expressions", function() {
     var message = 'foo bar baz';
 
@@ -153,6 +171,7 @@ describe("Included matchers:", function() {
     expect(message).not.toMatch(/quux/);
   });
 
+  //'toBeDefined' matcherは`undefined`との比較を行います
   it("The 'toBeDefined' matcher compares against `undefined`", function() {
     var a = {
       foo: 'foo'
@@ -162,6 +181,7 @@ describe("Included matchers:", function() {
     expect(a.bar).not.toBeDefined();
   });
 
+  //'toBeUndefined' matcherも`undefined`との比較を行います
   it("The `toBeUndefined` matcher compares against `undefined`", function() {
     var a = {
       foo: 'foo'
@@ -171,6 +191,7 @@ describe("Included matchers:", function() {
     expect(a.bar).toBeUndefined();
   });
 
+  //'toBeNull' matcherはnullとの比較を行います
   it("The 'toBeNull' matcher compares against null", function() {
     var a = null;
     var foo = 'foo';
@@ -180,6 +201,7 @@ describe("Included matchers:", function() {
     expect(foo).not.toBeNull();
   });
 
+  //'toBeTruthy' matcherはbooleanにキャストした結果との比較を行います
   it("The 'toBeTruthy' matcher is for boolean casting testing", function() {
     var a, foo = 'foo';
 
@@ -187,6 +209,7 @@ describe("Included matchers:", function() {
     expect(a).not.toBeTruthy();
   });
 
+  //'toBeFalsy' matcherもbooleanにキャストした結果との比較を行います
   it("The 'toBeFalsy' matcher is for boolean casting testing", function() {
     var a, foo = 'foo';
 
@@ -194,6 +217,7 @@ describe("Included matchers:", function() {
     expect(foo).not.toBeFalsy();
   });
 
+  //'toContain' matcherは配列の中からアイテムを見つけるために使います
   it("The 'toContain' matcher is for finding an item in an Array", function() {
     var a = ['foo', 'bar', 'baz'];
 
@@ -201,6 +225,7 @@ describe("Included matchers:", function() {
     expect(a).not.toContain('quux');
   });
 
+  //'toBeLessThan' matcherは数学的な比較を行います
   it("The 'toBeLessThan' matcher is for mathematical comparisons", function() {
     var pi = 3.1415926, e = 2.78;
 
@@ -208,6 +233,7 @@ describe("Included matchers:", function() {
     expect(pi).not.toBeLessThan(e);
   });
 
+  //'toBeGreaterThan' matcherも数学的な比較を行います
   it("The 'toBeGreaterThan' is for mathematical comparisons", function() {
     var pi = 3.1415926, e = 2.78;
 
@@ -215,6 +241,7 @@ describe("Included matchers:", function() {
     expect(e).not.toBeGreaterThan(pi);
   });
 
+  //'toBeCloseTo' matcherは与えられたレベルにおける十進精度の比較を行います
   it("The 'toBeCloseTo' matcher is for precision math comparison", function() {
     var pi = 3.1415926, e = 2.78;
 
@@ -222,6 +249,7 @@ describe("Included matchers:", function() {
     expect(pi).toBeCloseTo(e, 0);
   });
 
+  //'toThrow' matcherはfunctionが例外を発生させる場合のテストに用います
   it("The 'toThrow' matcher is for testing if a function throws an exception", function() {
     var foo = function() {
       return 1 + 2;
