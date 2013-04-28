@@ -266,17 +266,31 @@ describe("Included matchers:", function() {
 
 ## Grouping Related Specs with describe
 
-The describe function is for grouping related specs. The string parameter is for naming the collection of specs, and will be contatenated with specs to make a spec’s full name. This aids in finding specs in a large suite. If you name them well, your specs read as full sentences in traditional BDD style.
+## 関連するSpecをグループ化 describe
+
+The describe function is for grouping related specs. 
+The string parameter is for naming the collection of specs, 
+and will be concatenated with specs to make a spec’s full name. 
+This aids in finding specs in a large suite. 
+If you name them well, your specs read as full sentences in traditional BDD style.
+
+`describe` 関数は関連するspecをグループ化するためのものです。
+文字列の引数はspecの集合を命名するためのものであり、関連するspecをつなぎ合わせた完全な名前を設定します。
+これは、巨大なSuiteの中でspecを見つけるのに役立ちます。
+specにふさわしい名前付けを行った場合、従来の[BDD](http://en.wikipedia.org/wiki/Behavior-driven_development)スタイルの完全文として読むことができます。
 
 ````javascript
 describe("A spec", function() {
+
+  //これは単なる関数なので、いかなるコードも定義することが出来ます
   it("is just a function, so it can contain any code", function() {
     var foo = 0;
     foo += 1;
 
     expect(foo).toEqual(1);
   });
-
+  
+  //1つ以上の期待式を含めることができます
   it("can have more than one expectation", function() {
     var foo = 0;
     foo += 1;
@@ -287,13 +301,31 @@ describe("A spec", function() {
 });
 ````
 
-##  Setup and Teardown
+## Setup and Teardown
 
-To help a test suite DRY up any duplicated setup and teardown code, Jasmine provides the global beforeEach and afterEach functions. As the name implies the beforeEach function is called once before each spec in the describe is run and the afterEach function is called once after each spec.
+## Setup と Teardown
 
-Here is the same set of specs written a little differently. The variable under test is defined at the top-level scope — the describe block — and initialization code is moved into a beforeEach function. The afterEach function resets the variable before continuing.
+To help a test suite DRY up any duplicated setup and teardown code, 
+Jasmine provides the global beforeEach and afterEach functions. 
+As the name implies the beforeEach function is called once before each spec in the describe 
+is run and the afterEach function is called once after each spec.
+
+いかなるsetupとteardownコードの重複から、suiteのDRY原則を支援するため、
+Jasmineではグローバル関数 `beforeEach` と `afterEach` を提供しています。
+名前が示すように、 `beforeEach` は `describe` の中の各specが実行される前に一度だけ呼び出されます。
+また、 `afterEach` は各specの後に一度だけ呼び出されます。
+
+Here is the same set of specs written a little differently. 
+The variable under test is defined at the top-level scope — the describe block — and initialization code 
+is moved into a beforeEach function. 
+The afterEach function resets the variable before continuing.
+
+ここに、少し違ったように書かれたspecの同じセットがあります。
+最上位のスコープにある `describe` ブロックに以下のテストの変数が定義され、初期化するコードが `beforeEach` 関数内にあります。
+そして次のspecが継続される前に、 `afterEach` 関数にて変数がリセットされます。
 
 ````javascript
+//spec（setupとtear-downを伴った）
 describe("A spec (with setup and tear-down)", function() {
   var foo;
 
@@ -306,10 +338,12 @@ describe("A spec (with setup and tear-down)", function() {
     foo = 0;
   });
 
+  //これは単なる関数なので、いかなるコードも定義することが出来ます
   it("is just a function, so it can contain any code", function() {
     expect(foo).toEqual(1);
   });
 
+  //1つ以上の期待式を含めることができます
   it("can have more than one expectation", function() {
     expect(foo).toEqual(1);
     expect(true).toEqual(true);
@@ -317,9 +351,19 @@ describe("A spec (with setup and tear-down)", function() {
 });
 ````
 
-##  Nesting describe Blocks
+## Nesting describe Blocks
 
-Calls to describe can be nested, with specs defined at any level. This allows a suite to be composed as a tree of functions. Before a spec is executed, Jasmine walks down the tree executing each beforeEach function in order. After the spec is executed, Jasmine walks through the afterEach functions similarly.
+## describe ブロックのネスト
+
+Calls to describe can be nested, with specs defined at any level. 
+This allows a suite to be composed as a tree of functions. 
+Before a spec is executed, Jasmine walks down the tree executing each beforeEach function in order. 
+After the spec is executed, Jasmine walks through the afterEach functions similarly.
+
+`describe` 呼び出しは、いかなるのレベルで定義されたspecと共にネストすることができます。
+これにより、suiteをツリー構造のようにすることができます。
+specを実行する前に、Jasmineはツリーを順に下って行き `beforeEach` を実行します。
+そしてspecが実行された後、 `afterEach` も同様に実行します。
 
 ````javascript
 describe("A spec", function() {
@@ -334,15 +378,18 @@ describe("A spec", function() {
     foo = 0;
   });
 
+  //これは単なる関数なので、いかなるコードも定義することが出来ます
   it("is just a function, so it can contain any code", function() {
     expect(foo).toEqual(1);
   });
 
+  //1つ以上の期待式を含めることができます
   it("can have more than one expectation", function() {
     expect(foo).toEqual(1);
     expect(true).toEqual(true);
   });
 
+  //内側にネストした番目のdescribe
   describe("nested inside a second describe", function() {
     var bar;
 
@@ -350,6 +397,7 @@ describe("A spec", function() {
       bar = 1;
     });
 
+    //必要に応じて両方のスコープを参照できます
     it("can reference both scopes as needed ", function() {
       expect(foo).toEqual(bar);
     });
@@ -357,9 +405,15 @@ describe("A spec", function() {
 });
 ````
 
-##  Disabling Specs and Suites
+## Disabling Specs and Suites
 
-Suites and specs can be disabled with the xdescribe and xit functions, respectively. These suites and specs are skipped when run and thus their results will not appear in the results.
+## Specs と Suites を無効にする
+
+Suites and specs can be disabled with the xdescribe and xit functions, respectively. 
+These suites and specs are skipped when run and thus their results will not appear in the results.
+
+suiteやspecは、それぞれ `xdescribe` と `xit` とすることで無効にすることができます。
+これらのsiuteやspecは実行時にスキップされ、最終的な結果に影響することはありません。
 
 ````javascript
 xdescribe("A spec", function() {
@@ -370,6 +424,7 @@ xdescribe("A spec", function() {
     foo += 1;
   });
 
+  //これは単なる関数なので、いかなるコードも定義することが出来ます
   xit("is just a function, so it can contain any code", function() {
     expect(foo).toEqual(1);
   });
