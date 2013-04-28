@@ -13,7 +13,7 @@ This guide is running against Jasmine version 1.3.1 revision 1354556913.
 
 ##  Suites: describe Your Tests
 
-##  Suites: テストを記述する
+##  Suites: テストを説明する
 
 A test suite begins with a call to the global Jasmine function describe with two parameters: a string and a function. 
 The string is a name or title for a spec suite 
@@ -37,7 +37,7 @@ An expectation in Jasmine is an assertion that can be either true or false.
 A spec with all true expectations is a passing spec. 
 A spec with one or more expectations that evaluate to false is a failing spec.
 
-Jasmineでの期待式は、trueまたはfalseのいずれの状態を取るアサーションです。
+Jasmineにおける期待式は、trueまたはfalseのいずれかの状態となるアサーションです。
 specにおいてすべての期待式がtrueとなる場合、テスト仕様を満たすと判定しますが、
 1つ以上の期待式がfalseと評価される場合は満たさないと判定します。
 
@@ -58,7 +58,7 @@ describe("A suite", function() {
 Since describe and it blocks are functions, they can contain any executable code necessary to implement the test. JavaScript scoping rules apply, so variables declared in a describe are available to any it block inside the suite.
 
 describe または it ブロックは関数であるため、テストを実施するために必要ないかなるコードも含めることができます。
-Javascriptのスコープルールが適用され、 describeの中に宣言した変数は、suiteの内側のどの it ブロックからも利用できます。
+Javascriptのスコープルールが適用されるため、 describeの中に宣言した変数は、suiteの内側のどの it ブロックからも利用できます。
 
 ````javascript
 // suiteは単なる関数です
@@ -74,7 +74,7 @@ describe("A suite is just a function", function() {
 });
 ````
 
-##  Expectations
+## Expectations
 
 ## 期待式
 
@@ -83,13 +83,13 @@ It is chained with a Matcher function, which takes the expected value.
 
 期待式は、実行値を引数に取る `expect` 関数で構築されます。期待値を渡した `matcher` 関数を連結します。
 
-###  Matchers
+### Matchers
 
 Each matcher implements a boolean comparison between the actual value and the expected value. 
 It is responsible for reporting to Jasmine if the expectation is true or false. 
 Jasmine will then pass or fail the spec.
 
-それぞれの matcher は、実行値と期待値を比較してbooleanで返す機能を実装しています。
+それぞれの matcher は、実行値と期待値をboolean式で返す機能を実装しています。
 それは期待式がtrueであるかfalseであるかJasmineに報告する責務を持ち、それによりJasmineは次にspecを渡すか、または失敗するか選択します。
 
 Any matcher can evaluate to a negative assertion by chaining the call to expect with a not before calling the matcher.
@@ -112,19 +112,19 @@ describe("The 'toBe' matcher compares with ===", function() {
 });
 ````
 
-##  Included Matchers
+## Included Matchers
 
-## 付属 Matcher 関数
+## 同梱の Matcher 関数
 
 Jasmine has a rich set of matchers included. Each is used here – all expectations and specs pass.
 
-Jasmineは豊富なmatcherのセットを持っています。
+Jasmineには豊富なmatcherのセットを同梱しています。
 すべての期待式はこのページにて使われており、specはすべて合格するようになっています。
 
 There is also the ability to write custom matchers for 
 when a project’s domain calls for specific assertions that are not included below.
 
-さらに、プロジェクトの要求にて以下に含まれていない特定のアサーションを使用する場合、custom matchersを書くこともできます。
+さらに、プロジェクトの要求にて以下に含まれていない特定のアサーションを使用する場合、カスタムmatchersを書くこともできます。
 
 ````javascript
 //付属matchers
@@ -264,7 +264,7 @@ describe("Included matchers:", function() {
 });
 ````
 
-##  Grouping Related Specs with describe
+## Grouping Related Specs with describe
 
 The describe function is for grouping related specs. The string parameter is for naming the collection of specs, and will be contatenated with specs to make a spec’s full name. This aids in finding specs in a large suite. If you name them well, your specs read as full sentences in traditional BDD style.
 
@@ -376,7 +376,7 @@ xdescribe("A spec", function() {
 });
 ````
 
-##  Spies
+## Spies
 
 Jasmine’s test doubles are called spies. A spy can stub any function and tracks calls to it and all arguments. There are special matchers for interacting with spies.
 
