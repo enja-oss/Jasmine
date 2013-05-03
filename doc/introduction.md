@@ -433,9 +433,18 @@ xdescribe("A spec", function() {
 
 ## Spies
 
-Jasmine’s test doubles are called spies. A spy can stub any function and tracks calls to it and all arguments. There are special matchers for interacting with spies.
+Jasmine’s test doubles are called spies. A spy can stub any function and tracks calls to it and all arguments. 
+There are special matchers for interacting with spies.
 
-The toHaveBeenCalled matcher will return true if the spy was called. The toHaveBeenCalledWith matcher will return true if the argument list matches any of the recorded calls to the spy.
+Jasmineのテストを構成するもうひとつの部品はspyと呼ばれています。
+spyは任意の関数のスタブとなることができ、その呼び出しやすべての引数を追跡することができます。
+そしてspyと相互に作用する特別なmatcherがあります
+
+The toHaveBeenCalled matcher will return true if the spy was called. 
+The toHaveBeenCalledWith matcher will return true if the argument list matches any of the recorded calls to the spy.
+
+spyが呼び出された場合、 `toHaveBeenCalled` はtrueを返します。
+また、 `toHaveBeenCalledWith` は、引数リストがspyに記録されたいづれかの呼び出しと一致した場合、trueを返します。
 
 ````javascript
 describe("A spy", function() {
@@ -454,38 +463,48 @@ describe("A spy", function() {
     foo.setBar(456, 'another param');
   });
 
+  //spyが呼び出されたことを追跡します
   it("tracks that the spy was called", function() {
     expect(foo.setBar).toHaveBeenCalled();
   });
 
+  //呼び出し回数を追跡します
   it("tracks its number of calls", function() {
     expect(foo.setBar.calls.length).toEqual(2);
   });
 
+  //呼び出す際のすべての引数を追跡します
   it("tracks all the arguments of its calls", function() {
     expect(foo.setBar).toHaveBeenCalledWith(123);
     expect(foo.setBar).toHaveBeenCalledWith(456, 'another param');
   });
 
+  //最も直近に呼び出されたものにアクセスすることもできます
   it("allows access to the most recent call", function() {
     expect(foo.setBar.mostRecentCall.args[0]).toEqual(456);
   });
 
+  //（直近だけでなく）任意の呼び出しもアクセスすることができます
   it("allows access to other calls", function() {
     expect(foo.setBar.calls[0].args[0]).toEqual(123);
   });
 
+  //関数上ですべての実行を停止します
   it("stops all execution on a function", function() {
     expect(bar).toBeNull();
   });
 });
 ````
 
-##  Spies: andCallThrough
+## Spies: andCallThrough
 
-By chaining the spy with andCallThrough, the spy will still track all calls to it but in addition it will delegate to the actual implementation.
+By chaining the spy with andCallThrough, 
+the spy will still track all calls to it but in addition it will delegate to the actual implementation.
+
+spyに `andCallThrough` を連結することで、spyはすべての呼び出しを追跡しますが、指定されたもの処理は本来の実装へ委譲されます。
 
 ````javascript
+//call throughで構成されるspy
 describe("A spy, when configured to call through", function() {
   var foo, bar, fetchedBar;
 
@@ -505,25 +524,31 @@ describe("A spy, when configured to call through", function() {
     fetchedBar = foo.getBar();
   });
 
+  //spyが呼び出されたことを追跡します
   it("tracks that the spy was called", function() {
     expect(foo.getBar).toHaveBeenCalled();
   });
 
+  //他の機能の影響を受けてはならない
   it("should not effect other functions", function() {
     expect(bar).toEqual(123);
   });
 
+  //呼び出された場合、要求された値が返されます
   it("when called returns the requested value", function() {
     expect(fetchedBar).toEqual(123);
   });
 });
 ````
 
-##  Spies: andReturn
+## Spies: andReturn
 
 By chaining the spy with andReturn, all calls to the function will return a specific value.
 
+spyに `andReturn` を連結することで、すべての呼び出しは指定した値を返します。
+
 ````javascript
+//戻り値を偽装したspy
 describe("A spy, when faking a return value", function() {
   var foo, bar, fetchedBar;
 
@@ -543,25 +568,31 @@ describe("A spy, when faking a return value", function() {
     fetchedBar = foo.getBar();
   });
 
+  //spyが呼び出されたことを追跡します
   it("tracks that the spy was called", function() {
     expect(foo.getBar).toHaveBeenCalled();
   });
 
+  //他の機能の影響を受けてはならない
   it("should not effect other functions", function() {
     expect(bar).toEqual(123);
   });
 
+  //呼び出された場合、要求された値が返されます
   it("when called returns the requested value", function() {
     expect(fetchedBar).toEqual(745);
   });
 });
 ````
 
-##  Spies: andCallFake
+## Spies: andCallFake
 
 By chaining the spy with andCallFake, all calls to the spy will delegate to the supplied function.
 
+spyに `andCallFake` を連結することで、すべてのspyへの呼び出しは指定された関数へ委譲されます。
+
 ````javascript
+//戻り値を偽装したspy
 describe("A spy, when faking a return value", function() {
   var foo, bar, fetchedBar;
 
@@ -583,25 +614,36 @@ describe("A spy, when faking a return value", function() {
     fetchedBar = foo.getBar();
   });
 
+  //spyが呼び出されたことを追跡します
   it("tracks that the spy was called", function() {
     expect(foo.getBar).toHaveBeenCalled();
   });
 
+  //他の機能の影響を受けてはならない
   it("should not effect other functions", function() {
     expect(bar).toEqual(123);
   });
 
+  //呼び出された場合、要求された値が返されます
   it("when called returns the requested value", function() {
     expect(fetchedBar).toEqual(1001);
   });
 });
 ````
 
-##  Spies: createSpy
+## Spies: createSpy
 
-When there is not a function to spy on, jasmine.createSpy can create a “bare” spy. This spy acts as any other spy – tracking calls, arguments, etc. But there is no implementation behind it. Spies are JavaScript objects and can be used as such.
+When there is not a function to spy on, jasmine.createSpy can create a “bare” spy. 
+This spy acts as any other spy – tracking calls, arguments, etc. 
+But there is no implementation behind it. Spies are JavaScript objects and can be used as such.
+
+上のspyの機能で足りない場合、 `jasmine.createSpy` で空のスパイを作成することができます。
+このspyは（呼び出しや引数の追跡など）他のどのspy役もこなします。
+しかし、この状態ではまだ何も実装されていません。
+spyはJavascriptのオブジェクトであり、同様に扱うことができます。
 
 ````javascript
+//独自で作成したspy
 describe("A spy, when created manually", function() {
   var whatAmI;
 
@@ -611,33 +653,43 @@ describe("A spy, when created manually", function() {
     whatAmI("I", "am", "a", "spy");
   });
 
+  //これはエラーレポートのための名称です
   it("is named, which helps in error reporting", function() {
     expect(whatAmI.identity).toEqual('whatAmI')
   });
 
+  //spyが呼び出されたことを追跡します
   it("tracks that the spy was called", function() {
     expect(whatAmI).toHaveBeenCalled();
   });
 
+  //呼び出し回数を追跡します
   it("tracks its number of calls", function() {
     expect(whatAmI.calls.length).toEqual(1);
   });
 
+  //呼び出す際のすべての引数を追跡します
   it("tracks all the arguments of its calls", function() {
     expect(whatAmI).toHaveBeenCalledWith("I", "am", "a", "spy");
   });
 
+  //最も直近に呼び出されたものにアクセスすることもできます
   it("allows access to the most recent call", function() {
     expect(whatAmI.mostRecentCall.args[0]).toEqual("I");
   });
 });
 ````
 
-##  Spies: createSpyObj
+## Spies: createSpyObj
 
-In order to create a mock with multiple spies, use jasmine.createSpyObj and pass an array of strings. It returns an object that has a property for each string that is a spy.
+In order to create a mock with multiple spies, use jasmine.createSpyObj and pass an array of strings. 
+It returns an object that has a property for each string that is a spy.
+
+複数のspyを持ったmockを作成するために、文字列の配列を渡して `jasmine.createSpyObj` を使います。
+それぞれの文字列がspyのプロパティとなったオブジェクトを返します。
 
 ````javascript
+//複数のspyを独自で作成した場合
 describe("Multiple spies, when created manually", function() {
   var tape;
 
@@ -649,6 +701,7 @@ describe("Multiple spies, when created manually", function() {
     tape.rewind(0);
   });
 
+  //要求された機能ごとにspyを作成します
   it("creates spies for each requested function", function() {
     expect(tape.play).toBeDefined();
     expect(tape.pause).toBeDefined();
@@ -656,6 +709,7 @@ describe("Multiple spies, when created manually", function() {
     expect(tape.rewind).toBeDefined();
   });
 
+  //spyが呼び出されたことを追跡します
   it("tracks that the spies were called", function() {
     expect(tape.play).toHaveBeenCalled();
     expect(tape.pause).toHaveBeenCalled();
@@ -663,6 +717,7 @@ describe("Multiple spies, when created manually", function() {
     expect(tape.stop).not.toHaveBeenCalled();
   });
 
+  //呼び出す際のすべての引数を追跡します
   it("tracks all the arguments of its calls", function() {
     expect(tape.rewind).toHaveBeenCalledWith(0);
   });
