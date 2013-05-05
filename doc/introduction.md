@@ -819,25 +819,43 @@ describe("Manually ticking the Jasmine Mock Clock", function() {
 });
 ````
 
-##  Asynchronous Support
+## Asynchronous Support
+
+## 非同期のサポート
 
 Jasmine also has support for running specs that require testing asynchronous operations.
 
+またJasmineでは、非同期処理をテストする必要があるspecの実行もサポートしています。
+
 Specs are written by defining a set of blocks with calls to runs, which usually finish with an asynchronous call.
+
+specは `runs` 呼び出しを伴うブロックにて定義されます。通常、非同期呼び出しと共に終了します。
 
 The waitsFor block takes a latch function, a failure message, and a timeout.
 
-The latch function polls until it returns true or the timeout expires, whichever comes first. If the timeout expires, the spec fails with the error message.
+`waitsFor` ブロックはlatch回路関数、障害メッセージ、タイムアウトを引数に取ります。
 
-Once the asynchronous conditions have been met, another runs block defines final test behavior. This is usually expectations based on state after the asynch call returns.
+The latch function polls until it returns true or the timeout expires, whichever comes first. 
+If the timeout expires, the spec fails with the error message.
+
+latch回路関数は、tureかタイムアウトのいずれかが返されるまでポーリングします。
+タイムアウトが発生した場合、specは障害メッセージとともに失敗します。
+
+Once the asynchronous conditions have been met, another runs block defines final test behavior. 
+This is usually expectations based on state after the asynch call returns.
+
+一度、非同期の条件が満たされれば、他の `runs` ブロックについてもfinal（不変な）テスト動作として定義できます。
+これは通常、非同期処理終了後の状態が期待結果となります。
 
 ````javascript
+//非同期spec
 describe("Asynchronous specs", function() {
   var value, flag;
 
+  //非同期テストの準備と結果予測をサポートしています
   it("should support async execution of test preparation and exepectations", function() {
   
-  runs(function() {
+    runs(function() {
       flag = false;
       value = 0;
 
@@ -858,21 +876,51 @@ describe("Asynchronous specs", function() {
 });
 ````
 
-##  The Runner and Reporter
+## The Runner and Reporter
 
-Jasmine is built in JavaScript and must be included into a JS environment, such as a web page, in order to run. Like this web page.
+## RunnerおよびReporter
 
-This file is written in JavaScript and is compiled into HTML via Rocco. The JavaScript file is then included, via a <script> tag, so that all of the above specs are evaluated and recorded with Jasmine. Thus Jasmine can run all of these specs. This page is then considered a ‘runner.’
+Jasmine is built in JavaScript and must be included into a JS environment, such as a web page, 
+in order to run. Like this web page.
+
+JasmineはJavascriptで構築され、実行するためにWebページなどのJS実行環境に含まれる必要があります。
+例えばこのWebページのように。
+
+This file is written in JavaScript and is compiled into HTML via Rocco. 
+The JavaScript file is then included, 
+via a `<script>` tag, so that all of the above specs are evaluated and recorded with Jasmine. 
+Thus Jasmine can run all of these specs. This page is then considered a &lsquo;runner&lsquo;
+
+このファイルはJavascriptで記述され、[Rocco](http://rtomayko.github.com/rocco/)でHTMLにコンパイルされます。 
+Javascriptファイルはこのとき、`<script>` タグ内に含まれ、その結果、上記すべてのspecはJasmineで評価され記録されます。
+従って、Jasmineはこれらのspecをすべて実行することができるのです。
+つまりこのページは  &lsquo;runner&lsquo; と考えられます。
 
 Scroll down the page to see the results of the above specs. All of the specs should pass.
 
+ページをスクロールダウンして上記のspecの結果を表示してください。
+もちろん、すべてのspecが合格しているはずです。
+
 Meanwhile, here is how a runner works to execute a Jasmine suite.
 
-Create the HTMLReporter, which Jasmine calls to provide results of each spec and each suite. The Reporter is responsible for presenting results to the user.
+これらが、runnerがJasmineのsuiteを実行する仕組みです。
 
-Delegate filtering of specs to the reporter. Allows for clicking on single suites or specs in the results to only run a subset of the suite.
+Create the HTMLReporter, which Jasmine calls to provide results of each spec and each suite. 
+The Reporter is responsible for presenting results to the user.
+
+`HTMLReporter` を作成します。Jasmineはspecやsuiteごとの結果を提供するためにこれを呼び出します。
+このReporterは結果をユーザに提示する責務を持ちます。
+
+Delegate filtering of specs to the reporter. 
+Allows for clicking on single suites or specs in the results to only run a subset of the suite.
+
+Reporterにフィルタリングするspecを渡してください。
+単一のsuiteやspecをクリックすることで、suiteの一部分のみを実行して結果を取得することができます。
 
 Run all of the tests when the page finishes loading – and make sure to run any previous onload handler
+
+ページのロードが完了した際に、すべてのテストを実行します。
+そして、 `onload` イベントハンドラの前に実行するようにしてください。
 
 ````javascript
 (function() {
@@ -904,19 +952,34 @@ Run all of the tests when the page finishes loading – and make sure to run any
 
 ## Test Results
 
+## テスト結果
+
 Scroll down to see the results of all of these specs.
+
+これらすべてのspec結果を見るためにスクロールダウンしてください。
 
 ##  Downloads
 
-The Standalone Release is for simple, browser page, or console projects
-The Jasmine Ruby Gem is for Rails, Ruby, or Ruby-friendly development
-Other Environments are supported as well
-Support
+* The Standalone Release is for simple, browser page, or console projects
+* The Jasmine Ruby Gem is for Rails, Ruby, or Ruby-friendly development
+* Other Environments are supported as well
+* [Standalone Release](http://github.com/pivotal/jasmine/downloads) はシンプル、ブラウザページ、コンソールプロジェクト用です。
+* [Jasmine Ruby Gem](http://github.com/pivotal/jasmine-gem) は、Rails, Ruby, or Rubyに慣れている開発者用です。
+* [他の環境](http://github.com/pivotal/jasmine/wiki)も同様にサポートされます。
 
-Mailing list at Google Groups – a great first stop to ask questions, propose features, or discuss pull requests
-Report Issues at Github
-The Backlog lives at Pivotal Tracker
-Follow @JasmineBDD on Twitter
-Thanks
+## Support
+
+* Mailing list at Google Groups – a great first stop to ask questions, propose features, or discuss pull requests
+* Report Issues at Github
+* The Backlog lives at Pivotal Tracker
+* Follow @JasmineBDD on Twitter
+* [Mailing list](http://groups.google.com/group/jasmine-js) はGoogle Groupにあります。機能の提案、pull requestsの議論、質問する素晴らしい場です。
+* バグの報告は[Guthub](http://github.com/pivotal/jasmine/issues)へ。
+* [Backlog](http://www.pivotaltracker.com/projects/10606)は[Pivotal Tracker](http://www.pivotaltracker.com/)にあります。
+* Twitterで[@JasmineBDD](http://twitter.com/jasminebdd)をフォローしてください。
+
+## Thanks
 
 Running documentation inspired by @mjackson and the 2012 Fluent Summit.
+
+このランニングドキュメントは[@mjackson](http://twitter.com/mjackson)と2012年の[Fluent](http://fluentconf.com/) Summitからひらめきを得たものです。
