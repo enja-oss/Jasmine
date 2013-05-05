@@ -724,17 +724,26 @@ describe("Multiple spies, when created manually", function() {
 });
 ````
 
-##  Matching Anything with jasmine.any
+## Matching Anything with jasmine.any
 
-jasmine.any takes a constructor or “class” name as an expected value. It returns true if the constructor matches the constructor of the actual value.
+## jasmine.anyで任意の値をマッチング
+
+jasmine.any takes a constructor or “class” name as an expected value. 
+It returns true if the constructor matches the constructor of the actual value.
+
+`jasmine.any` は期待値としてコンストラクタかクラス名を引数に取ります。
+実行値のコンストラクタと一致する場合、trueを返します。
+
 
 ````javascript
 describe("jasmine.any", function() {
+  //任意の値とマッチング
   it("matches any value", function() {
     expect({}).toEqual(jasmine.any(Object));
     expect(12).toEqual(jasmine.any(Number));
   });
 
+  //spyと一緒に使用する場合
   describe("when used with a spy", function() {
     it("is useful for comparing arguments", function() {
       var foo = jasmine.createSpy('foo');
@@ -748,15 +757,27 @@ describe("jasmine.any", function() {
 });
 ````
 
-##  Mocking the JavaScript Clock
+## Mocking the JavaScript Clock
 
-The Jasmine Mock Clock is available for a test suites that need the ability to use setTimeout or setInterval callbacks. It makes the timer callbacks synchronous, thus making them easier to test.
+## JavaScript タイマーMockを作成する
+
+The Jasmine Mock Clock is available for a test suites that need the ability to use setTimeout or setInterval callbacks. 
+It makes the timer callbacks synchronous, thus making them easier to test.
+
+JasmineのMock Clockは、テストsuiteが `setTimeout` や `setInterval` のコールバックを必要とする場合にそれを可能にします。
+タイマーのコールバックが同期するようになるので、テストが容易になります。
 
 It is installed with a call to jasmine.Clock.useMock in a spec or suite that needs to call the timer functions.
 
-Calls to any registered callback are triggered when the clock is ticked forward via the jasmine.Clock.tick function, which takes a number of milliseconds.
+タイマー関数を呼び出すspecやsuiteの中で、`jasmine.Clock.useMock` を呼び出すことで導入できます。
+
+Calls to any registered callback are triggered when the clock is ticked forward via the jasmine.Clock.tick function, 
+which takes a number of milliseconds.
+
+`jasmine.Clock.tick` 関数に渡されたミリ秒ごとに経過時間がチェックされ、登録されているコールバックを呼び出します。
 
 ````javascript
+//Jasmine Mock Clockで手動タイマー
 describe("Manually ticking the Jasmine Mock Clock", function() {
   var timerCallback;
 
@@ -765,6 +786,7 @@ describe("Manually ticking the Jasmine Mock Clock", function() {
     jasmine.Clock.useMock();
   });
 
+  //timeoutが同期して呼び出されている
   it("causes a timeout to be called synchronously", function() {
     setTimeout(function() {
       timerCallback();
@@ -777,6 +799,7 @@ describe("Manually ticking the Jasmine Mock Clock", function() {
     expect(timerCallback).toHaveBeenCalled();
   });
 
+  //intervalが同期して呼び出されている
   it("causes an interval to be called synchronously", function() {
     setInterval(function() {
       timerCallback();
