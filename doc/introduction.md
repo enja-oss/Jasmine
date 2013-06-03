@@ -266,17 +266,31 @@ describe("Included matchers:", function() {
 
 ## Grouping Related Specs with describe
 
-The describe function is for grouping related specs. The string parameter is for naming the collection of specs, and will be contatenated with specs to make a spec’s full name. This aids in finding specs in a large suite. If you name them well, your specs read as full sentences in traditional BDD style.
+## 関連するSpecをグループ化 describe
+
+The describe function is for grouping related specs. 
+The string parameter is for naming the collection of specs, 
+and will be concatenated with specs to make a spec’s full name. 
+This aids in finding specs in a large suite. 
+If you name them well, your specs read as full sentences in traditional BDD style.
+
+`describe` 関数は関連するspecをグループ化するためのものです。
+文字列の引数はspecの集合を命名するためのものであり、関連するspecをつなぎ合わせた完全な名前を設定します。
+これは、巨大なSuiteの中でspecを見つけるのに役立ちます。
+specにふさわしい名前付けを行った場合、従来の[BDD](http://en.wikipedia.org/wiki/Behavior-driven_development)スタイルの完全文として読むことができます。
 
 ````javascript
 describe("A spec", function() {
+
+  //これは単なる関数なので、いかなるコードも定義することが出来ます
   it("is just a function, so it can contain any code", function() {
     var foo = 0;
     foo += 1;
 
     expect(foo).toEqual(1);
   });
-
+  
+  //1つ以上の期待式を含めることができます
   it("can have more than one expectation", function() {
     var foo = 0;
     foo += 1;
@@ -287,13 +301,31 @@ describe("A spec", function() {
 });
 ````
 
-##  Setup and Teardown
+## Setup and Teardown
 
-To help a test suite DRY up any duplicated setup and teardown code, Jasmine provides the global beforeEach and afterEach functions. As the name implies the beforeEach function is called once before each spec in the describe is run and the afterEach function is called once after each spec.
+## Setup と Teardown
 
-Here is the same set of specs written a little differently. The variable under test is defined at the top-level scope — the describe block — and initialization code is moved into a beforeEach function. The afterEach function resets the variable before continuing.
+To help a test suite DRY up any duplicated setup and teardown code, 
+Jasmine provides the global beforeEach and afterEach functions. 
+As the name implies the beforeEach function is called once before each spec in the describe 
+is run and the afterEach function is called once after each spec.
+
+いかなるsetupとteardownコードの重複から、suiteのDRY原則を支援するため、
+Jasmineではグローバル関数 `beforeEach` と `afterEach` を提供しています。
+名前が示すように、 `beforeEach` は `describe` の中の各specが実行される前に一度だけ呼び出されます。
+また、 `afterEach` は各specの後に一度だけ呼び出されます。
+
+Here is the same set of specs written a little differently. 
+The variable under test is defined at the top-level scope — the describe block — and initialization code 
+is moved into a beforeEach function. 
+The afterEach function resets the variable before continuing.
+
+ここに、少し違ったように書かれたspecの同じセットがあります。
+最上位のスコープにある `describe` ブロックに以下のテストの変数が定義され、初期化するコードが `beforeEach` 関数内にあります。
+そして次のspecが継続される前に、 `afterEach` 関数にて変数がリセットされます。
 
 ````javascript
+//spec（setupとtear-downを伴った）
 describe("A spec (with setup and tear-down)", function() {
   var foo;
 
@@ -306,10 +338,12 @@ describe("A spec (with setup and tear-down)", function() {
     foo = 0;
   });
 
+  //これは単なる関数なので、いかなるコードも定義することが出来ます
   it("is just a function, so it can contain any code", function() {
     expect(foo).toEqual(1);
   });
 
+  //1つ以上の期待式を含めることができます
   it("can have more than one expectation", function() {
     expect(foo).toEqual(1);
     expect(true).toEqual(true);
@@ -317,9 +351,19 @@ describe("A spec (with setup and tear-down)", function() {
 });
 ````
 
-##  Nesting describe Blocks
+## Nesting describe Blocks
 
-Calls to describe can be nested, with specs defined at any level. This allows a suite to be composed as a tree of functions. Before a spec is executed, Jasmine walks down the tree executing each beforeEach function in order. After the spec is executed, Jasmine walks through the afterEach functions similarly.
+## describe ブロックのネスト
+
+Calls to describe can be nested, with specs defined at any level. 
+This allows a suite to be composed as a tree of functions. 
+Before a spec is executed, Jasmine walks down the tree executing each beforeEach function in order. 
+After the spec is executed, Jasmine walks through the afterEach functions similarly.
+
+`describe` 呼び出しは、いかなるのレベルで定義されたspecと共にネストすることができます。
+これにより、suiteをツリー構造のようにすることができます。
+specを実行する前に、Jasmineはツリーを順に下って行き `beforeEach` を実行します。
+そしてspecが実行された後、 `afterEach` も同様に実行します。
 
 ````javascript
 describe("A spec", function() {
@@ -334,15 +378,18 @@ describe("A spec", function() {
     foo = 0;
   });
 
+  //これは単なる関数なので、いかなるコードも定義することが出来ます
   it("is just a function, so it can contain any code", function() {
     expect(foo).toEqual(1);
   });
 
+  //1つ以上の期待式を含めることができます
   it("can have more than one expectation", function() {
     expect(foo).toEqual(1);
     expect(true).toEqual(true);
   });
 
+  //内側にネストした番目のdescribe
   describe("nested inside a second describe", function() {
     var bar;
 
@@ -350,6 +397,7 @@ describe("A spec", function() {
       bar = 1;
     });
 
+    //必要に応じて両方のスコープを参照できます
     it("can reference both scopes as needed ", function() {
       expect(foo).toEqual(bar);
     });
@@ -357,9 +405,15 @@ describe("A spec", function() {
 });
 ````
 
-##  Disabling Specs and Suites
+## Disabling Specs and Suites
 
-Suites and specs can be disabled with the xdescribe and xit functions, respectively. These suites and specs are skipped when run and thus their results will not appear in the results.
+## Specs と Suites を無効にする
+
+Suites and specs can be disabled with the xdescribe and xit functions, respectively. 
+These suites and specs are skipped when run and thus their results will not appear in the results.
+
+suiteやspecは、それぞれ `xdescribe` と `xit` とすることで無効にすることができます。
+これらのsiuteやspecは実行時にスキップされ、最終的な結果に影響することはありません。
 
 ````javascript
 xdescribe("A spec", function() {
@@ -370,6 +424,7 @@ xdescribe("A spec", function() {
     foo += 1;
   });
 
+  //これは単なる関数なので、いかなるコードも定義することが出来ます
   xit("is just a function, so it can contain any code", function() {
     expect(foo).toEqual(1);
   });
@@ -378,9 +433,18 @@ xdescribe("A spec", function() {
 
 ## Spies
 
-Jasmine’s test doubles are called spies. A spy can stub any function and tracks calls to it and all arguments. There are special matchers for interacting with spies.
+Jasmine’s test doubles are called spies. A spy can stub any function and tracks calls to it and all arguments. 
+There are special matchers for interacting with spies.
 
-The toHaveBeenCalled matcher will return true if the spy was called. The toHaveBeenCalledWith matcher will return true if the argument list matches any of the recorded calls to the spy.
+Jasmineのテストを構成するもうひとつの部品はspyと呼ばれています。
+spyは任意の関数のスタブとなることができ、その呼び出しやすべての引数を追跡することができます。
+そしてspyと相互に作用する特別なmatcherがあります
+
+The toHaveBeenCalled matcher will return true if the spy was called. 
+The toHaveBeenCalledWith matcher will return true if the argument list matches any of the recorded calls to the spy.
+
+spyが呼び出された場合、 `toHaveBeenCalled` はtrueを返します。
+また、 `toHaveBeenCalledWith` は、引数リストがspyに記録されたいづれかの呼び出しと一致した場合、trueを返します。
 
 ````javascript
 describe("A spy", function() {
@@ -399,38 +463,48 @@ describe("A spy", function() {
     foo.setBar(456, 'another param');
   });
 
+  //spyが呼び出されたことを追跡します
   it("tracks that the spy was called", function() {
     expect(foo.setBar).toHaveBeenCalled();
   });
 
+  //呼び出し回数を追跡します
   it("tracks its number of calls", function() {
     expect(foo.setBar.calls.length).toEqual(2);
   });
 
+  //呼び出す際のすべての引数を追跡します
   it("tracks all the arguments of its calls", function() {
     expect(foo.setBar).toHaveBeenCalledWith(123);
     expect(foo.setBar).toHaveBeenCalledWith(456, 'another param');
   });
 
+  //最も直近に呼び出されたものにアクセスすることもできます
   it("allows access to the most recent call", function() {
     expect(foo.setBar.mostRecentCall.args[0]).toEqual(456);
   });
 
+  //（直近だけでなく）任意の呼び出しもアクセスすることができます
   it("allows access to other calls", function() {
     expect(foo.setBar.calls[0].args[0]).toEqual(123);
   });
 
+  //関数上ですべての実行を停止します
   it("stops all execution on a function", function() {
     expect(bar).toBeNull();
   });
 });
 ````
 
-##  Spies: andCallThrough
+## Spies: andCallThrough
 
-By chaining the spy with andCallThrough, the spy will still track all calls to it but in addition it will delegate to the actual implementation.
+By chaining the spy with andCallThrough, 
+the spy will still track all calls to it but in addition it will delegate to the actual implementation.
+
+spyに `andCallThrough` を連結することで、spyはすべての呼び出しを追跡しますが、指定されたもの処理は本来の実装へ委譲されます。
 
 ````javascript
+//call throughで構成されるspy
 describe("A spy, when configured to call through", function() {
   var foo, bar, fetchedBar;
 
@@ -450,25 +524,31 @@ describe("A spy, when configured to call through", function() {
     fetchedBar = foo.getBar();
   });
 
+  //spyが呼び出されたことを追跡します
   it("tracks that the spy was called", function() {
     expect(foo.getBar).toHaveBeenCalled();
   });
 
+  //他の機能の影響を受けてはならない
   it("should not effect other functions", function() {
     expect(bar).toEqual(123);
   });
 
+  //呼び出された場合、要求された値が返されます
   it("when called returns the requested value", function() {
     expect(fetchedBar).toEqual(123);
   });
 });
 ````
 
-##  Spies: andReturn
+## Spies: andReturn
 
 By chaining the spy with andReturn, all calls to the function will return a specific value.
 
+spyに `andReturn` を連結することで、すべての呼び出しは指定した値を返します。
+
 ````javascript
+//戻り値を偽装したspy
 describe("A spy, when faking a return value", function() {
   var foo, bar, fetchedBar;
 
@@ -488,25 +568,31 @@ describe("A spy, when faking a return value", function() {
     fetchedBar = foo.getBar();
   });
 
+  //spyが呼び出されたことを追跡します
   it("tracks that the spy was called", function() {
     expect(foo.getBar).toHaveBeenCalled();
   });
 
+  //他の機能の影響を受けてはならない
   it("should not effect other functions", function() {
     expect(bar).toEqual(123);
   });
 
+  //呼び出された場合、要求された値が返されます
   it("when called returns the requested value", function() {
     expect(fetchedBar).toEqual(745);
   });
 });
 ````
 
-##  Spies: andCallFake
+## Spies: andCallFake
 
 By chaining the spy with andCallFake, all calls to the spy will delegate to the supplied function.
 
+spyに `andCallFake` を連結することで、すべてのspyへの呼び出しは指定された関数へ委譲されます。
+
 ````javascript
+//戻り値を偽装したspy
 describe("A spy, when faking a return value", function() {
   var foo, bar, fetchedBar;
 
@@ -528,25 +614,36 @@ describe("A spy, when faking a return value", function() {
     fetchedBar = foo.getBar();
   });
 
+  //spyが呼び出されたことを追跡します
   it("tracks that the spy was called", function() {
     expect(foo.getBar).toHaveBeenCalled();
   });
 
+  //他の機能の影響を受けてはならない
   it("should not effect other functions", function() {
     expect(bar).toEqual(123);
   });
 
+  //呼び出された場合、要求された値が返されます
   it("when called returns the requested value", function() {
     expect(fetchedBar).toEqual(1001);
   });
 });
 ````
 
-##  Spies: createSpy
+## Spies: createSpy
 
-When there is not a function to spy on, jasmine.createSpy can create a “bare” spy. This spy acts as any other spy – tracking calls, arguments, etc. But there is no implementation behind it. Spies are JavaScript objects and can be used as such.
+When there is not a function to spy on, jasmine.createSpy can create a “bare” spy. 
+This spy acts as any other spy – tracking calls, arguments, etc. 
+But there is no implementation behind it. Spies are JavaScript objects and can be used as such.
+
+上のspyの機能で足りない場合、 `jasmine.createSpy` で空のスパイを作成することができます。
+このspyは（呼び出しや引数の追跡など）他のどのspy役もこなします。
+しかし、この状態ではまだ何も実装されていません。
+spyはJavascriptのオブジェクトであり、同様に扱うことができます。
 
 ````javascript
+//独自で作成したspy
 describe("A spy, when created manually", function() {
   var whatAmI;
 
@@ -556,33 +653,43 @@ describe("A spy, when created manually", function() {
     whatAmI("I", "am", "a", "spy");
   });
 
+  //これはエラーレポートのための名称です
   it("is named, which helps in error reporting", function() {
     expect(whatAmI.identity).toEqual('whatAmI')
   });
 
+  //spyが呼び出されたことを追跡します
   it("tracks that the spy was called", function() {
     expect(whatAmI).toHaveBeenCalled();
   });
 
+  //呼び出し回数を追跡します
   it("tracks its number of calls", function() {
     expect(whatAmI.calls.length).toEqual(1);
   });
 
+  //呼び出す際のすべての引数を追跡します
   it("tracks all the arguments of its calls", function() {
     expect(whatAmI).toHaveBeenCalledWith("I", "am", "a", "spy");
   });
 
+  //最も直近に呼び出されたものにアクセスすることもできます
   it("allows access to the most recent call", function() {
     expect(whatAmI.mostRecentCall.args[0]).toEqual("I");
   });
 });
 ````
 
-##  Spies: createSpyObj
+## Spies: createSpyObj
 
-In order to create a mock with multiple spies, use jasmine.createSpyObj and pass an array of strings. It returns an object that has a property for each string that is a spy.
+In order to create a mock with multiple spies, use jasmine.createSpyObj and pass an array of strings. 
+It returns an object that has a property for each string that is a spy.
+
+複数のspyを持ったmockを作成するために、文字列の配列を渡して `jasmine.createSpyObj` を使います。
+それぞれの文字列がspyのプロパティとなったオブジェクトを返します。
 
 ````javascript
+//複数のspyを独自で作成した場合
 describe("Multiple spies, when created manually", function() {
   var tape;
 
@@ -594,6 +701,7 @@ describe("Multiple spies, when created manually", function() {
     tape.rewind(0);
   });
 
+  //要求された機能ごとにspyを作成します
   it("creates spies for each requested function", function() {
     expect(tape.play).toBeDefined();
     expect(tape.pause).toBeDefined();
@@ -601,6 +709,7 @@ describe("Multiple spies, when created manually", function() {
     expect(tape.rewind).toBeDefined();
   });
 
+  //spyが呼び出されたことを追跡します
   it("tracks that the spies were called", function() {
     expect(tape.play).toHaveBeenCalled();
     expect(tape.pause).toHaveBeenCalled();
@@ -608,23 +717,33 @@ describe("Multiple spies, when created manually", function() {
     expect(tape.stop).not.toHaveBeenCalled();
   });
 
+  //呼び出す際のすべての引数を追跡します
   it("tracks all the arguments of its calls", function() {
     expect(tape.rewind).toHaveBeenCalledWith(0);
   });
 });
 ````
 
-##  Matching Anything with jasmine.any
+## Matching Anything with jasmine.any
 
-jasmine.any takes a constructor or “class” name as an expected value. It returns true if the constructor matches the constructor of the actual value.
+## jasmine.anyで任意の値をマッチング
+
+jasmine.any takes a constructor or “class” name as an expected value. 
+It returns true if the constructor matches the constructor of the actual value.
+
+`jasmine.any` は期待値としてコンストラクタかクラス名を引数に取ります。
+実行値のコンストラクタと一致する場合、trueを返します。
+
 
 ````javascript
 describe("jasmine.any", function() {
+  //任意の値とマッチング
   it("matches any value", function() {
     expect({}).toEqual(jasmine.any(Object));
     expect(12).toEqual(jasmine.any(Number));
   });
 
+  //spyと一緒に使用する場合
   describe("when used with a spy", function() {
     it("is useful for comparing arguments", function() {
       var foo = jasmine.createSpy('foo');
@@ -638,15 +757,27 @@ describe("jasmine.any", function() {
 });
 ````
 
-##  Mocking the JavaScript Clock
+## Mocking the JavaScript Clock
 
-The Jasmine Mock Clock is available for a test suites that need the ability to use setTimeout or setInterval callbacks. It makes the timer callbacks synchronous, thus making them easier to test.
+## JavaScript タイマーMockを作成する
+
+The Jasmine Mock Clock is available for a test suites that need the ability to use setTimeout or setInterval callbacks. 
+It makes the timer callbacks synchronous, thus making them easier to test.
+
+JasmineのMock Clockは、テストsuiteが `setTimeout` や `setInterval` のコールバックを必要とする場合にそれを可能にします。
+タイマーのコールバックが同期するようになるので、テストが容易になります。
 
 It is installed with a call to jasmine.Clock.useMock in a spec or suite that needs to call the timer functions.
 
-Calls to any registered callback are triggered when the clock is ticked forward via the jasmine.Clock.tick function, which takes a number of milliseconds.
+タイマー関数を呼び出すspecやsuiteの中で、`jasmine.Clock.useMock` を呼び出すことで導入できます。
+
+Calls to any registered callback are triggered when the clock is ticked forward via the jasmine.Clock.tick function, 
+which takes a number of milliseconds.
+
+`jasmine.Clock.tick` 関数に渡されたミリ秒ごとに経過時間がチェックされ、登録されているコールバックを呼び出します。
 
 ````javascript
+//Jasmine Mock Clockで手動タイマー
 describe("Manually ticking the Jasmine Mock Clock", function() {
   var timerCallback;
 
@@ -655,6 +786,7 @@ describe("Manually ticking the Jasmine Mock Clock", function() {
     jasmine.Clock.useMock();
   });
 
+  //timeoutが同期して呼び出されている
   it("causes a timeout to be called synchronously", function() {
     setTimeout(function() {
       timerCallback();
@@ -667,6 +799,7 @@ describe("Manually ticking the Jasmine Mock Clock", function() {
     expect(timerCallback).toHaveBeenCalled();
   });
 
+  //intervalが同期して呼び出されている
   it("causes an interval to be called synchronously", function() {
     setInterval(function() {
       timerCallback();
@@ -686,25 +819,43 @@ describe("Manually ticking the Jasmine Mock Clock", function() {
 });
 ````
 
-##  Asynchronous Support
+## Asynchronous Support
+
+## 非同期のサポート
 
 Jasmine also has support for running specs that require testing asynchronous operations.
 
+またJasmineでは、非同期処理をテストする必要があるspecの実行もサポートしています。
+
 Specs are written by defining a set of blocks with calls to runs, which usually finish with an asynchronous call.
+
+specは `runs` 呼び出しを伴うブロックにて定義されます。通常、非同期呼び出しと共に終了します。
 
 The waitsFor block takes a latch function, a failure message, and a timeout.
 
-The latch function polls until it returns true or the timeout expires, whichever comes first. If the timeout expires, the spec fails with the error message.
+`waitsFor` ブロックはlatch回路関数、障害メッセージ、タイムアウトを引数に取ります。
 
-Once the asynchronous conditions have been met, another runs block defines final test behavior. This is usually expectations based on state after the asynch call returns.
+The latch function polls until it returns true or the timeout expires, whichever comes first. 
+If the timeout expires, the spec fails with the error message.
+
+latch回路関数は、tureかタイムアウトのいずれかが返されるまでポーリングします。
+タイムアウトが発生した場合、specは障害メッセージとともに失敗します。
+
+Once the asynchronous conditions have been met, another runs block defines final test behavior. 
+This is usually expectations based on state after the asynch call returns.
+
+一度、非同期の条件が満たされれば、他の `runs` ブロックについてもfinal（不変な）テスト動作として定義できます。
+これは通常、非同期処理終了後の状態が期待結果となります。
 
 ````javascript
+//非同期spec
 describe("Asynchronous specs", function() {
   var value, flag;
 
+  //非同期テストの準備と結果予測をサポートしています
   it("should support async execution of test preparation and exepectations", function() {
   
-  runs(function() {
+    runs(function() {
       flag = false;
       value = 0;
 
@@ -725,21 +876,51 @@ describe("Asynchronous specs", function() {
 });
 ````
 
-##  The Runner and Reporter
+## The Runner and Reporter
 
-Jasmine is built in JavaScript and must be included into a JS environment, such as a web page, in order to run. Like this web page.
+## RunnerおよびReporter
 
-This file is written in JavaScript and is compiled into HTML via Rocco. The JavaScript file is then included, via a <script> tag, so that all of the above specs are evaluated and recorded with Jasmine. Thus Jasmine can run all of these specs. This page is then considered a ‘runner.’
+Jasmine is built in JavaScript and must be included into a JS environment, such as a web page, 
+in order to run. Like this web page.
+
+JasmineはJavascriptで構築され、実行するためにWebページなどのJS実行環境に含まれる必要があります。
+例えばこのWebページのように。
+
+This file is written in JavaScript and is compiled into HTML via Rocco. 
+The JavaScript file is then included, 
+via a `<script>` tag, so that all of the above specs are evaluated and recorded with Jasmine. 
+Thus Jasmine can run all of these specs. This page is then considered a &lsquo;runner&lsquo;
+
+このファイルはJavascriptで記述され、[Rocco](http://rtomayko.github.com/rocco/)でHTMLにコンパイルされます。 
+Javascriptファイルはこのとき、`<script>` タグ内に含まれ、その結果、上記すべてのspecはJasmineで評価され記録されます。
+従って、Jasmineはこれらのspecをすべて実行することができるのです。
+つまりこのページは  &lsquo;runner&lsquo; と考えられます。
 
 Scroll down the page to see the results of the above specs. All of the specs should pass.
 
+ページをスクロールダウンして上記のspecの結果を表示してください。
+もちろん、すべてのspecが合格しているはずです。
+
 Meanwhile, here is how a runner works to execute a Jasmine suite.
 
-Create the HTMLReporter, which Jasmine calls to provide results of each spec and each suite. The Reporter is responsible for presenting results to the user.
+これらが、runnerがJasmineのsuiteを実行する仕組みです。
 
-Delegate filtering of specs to the reporter. Allows for clicking on single suites or specs in the results to only run a subset of the suite.
+Create the HTMLReporter, which Jasmine calls to provide results of each spec and each suite. 
+The Reporter is responsible for presenting results to the user.
+
+`HTMLReporter` を作成します。Jasmineはspecやsuiteごとの結果を提供するためにこれを呼び出します。
+このReporterは結果をユーザに提示する責務を持ちます。
+
+Delegate filtering of specs to the reporter. 
+Allows for clicking on single suites or specs in the results to only run a subset of the suite.
+
+Reporterにフィルタリングするspecを渡してください。
+単一のsuiteやspecをクリックすることで、suiteの一部分のみを実行して結果を取得することができます。
 
 Run all of the tests when the page finishes loading – and make sure to run any previous onload handler
+
+ページのロードが完了した際に、すべてのテストを実行します。
+そして、 `onload` イベントハンドラの前に実行するようにしてください。
 
 ````javascript
 (function() {
@@ -771,19 +952,34 @@ Run all of the tests when the page finishes loading – and make sure to run any
 
 ## Test Results
 
+## テスト結果
+
 Scroll down to see the results of all of these specs.
+
+これらすべてのspec結果を見るためにスクロールダウンしてください。
 
 ##  Downloads
 
-The Standalone Release is for simple, browser page, or console projects
-The Jasmine Ruby Gem is for Rails, Ruby, or Ruby-friendly development
-Other Environments are supported as well
-Support
+* The Standalone Release is for simple, browser page, or console projects
+* The Jasmine Ruby Gem is for Rails, Ruby, or Ruby-friendly development
+* Other Environments are supported as well
+* [Standalone Release](http://github.com/pivotal/jasmine/downloads) はシンプル、ブラウザページ、コンソールプロジェクト用です。
+* [Jasmine Ruby Gem](http://github.com/pivotal/jasmine-gem) は、Rails, Ruby, or Rubyに慣れている開発者用です。
+* [他の環境](http://github.com/pivotal/jasmine/wiki)も同様にサポートされます。
 
-Mailing list at Google Groups – a great first stop to ask questions, propose features, or discuss pull requests
-Report Issues at Github
-The Backlog lives at Pivotal Tracker
-Follow @JasmineBDD on Twitter
-Thanks
+## Support
+
+* Mailing list at Google Groups – a great first stop to ask questions, propose features, or discuss pull requests
+* Report Issues at Github
+* The Backlog lives at Pivotal Tracker
+* Follow @JasmineBDD on Twitter
+* [Mailing list](http://groups.google.com/group/jasmine-js) はGoogle Groupにあります。機能の提案、pull requestsの議論、質問する素晴らしい場です。
+* バグの報告は[Guthub](http://github.com/pivotal/jasmine/issues)へ。
+* [Backlog](http://www.pivotaltracker.com/projects/10606)は[Pivotal Tracker](http://www.pivotaltracker.com/)にあります。
+* Twitterで[@JasmineBDD](http://twitter.com/jasminebdd)をフォローしてください。
+
+## Thanks
 
 Running documentation inspired by @mjackson and the 2012 Fluent Summit.
+
+このランニングドキュメントは[@mjackson](http://twitter.com/mjackson)と2012年の[Fluent](http://fluentconf.com/) Summitからひらめきを得たものです。
