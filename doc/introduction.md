@@ -1,3 +1,7 @@
+ +  元文書: [http://pivotal.github.io/jasmine/ · pivotal/jasmine · GitHub]
+(http://pivotal.github.io/jasmine/ 
+"wycatshttp://pivotal.github.io/jasmine/ · pivotal/jasmine · GitHub")
+
 # introduction-1.3.1.js
 
 JasmineはJavascriptコードをテストするための振舞い駆動開発フレームワークです。
